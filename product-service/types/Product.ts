@@ -4,4 +4,5 @@ export interface Product {
     price: number;
     description: string;
     count: number;
+    author: string;
 }
