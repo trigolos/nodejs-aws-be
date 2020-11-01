@@ -7,6 +7,9 @@ export const getProductsList: APIGatewayProxyHandler = async (_event, _context) 
 
     return {
         statusCode: 200,
+        headers: {
+            'Access-Control-Allow-Origin': '*',
+        },
         body: JSON.stringify(allProducts),
     };
 }
