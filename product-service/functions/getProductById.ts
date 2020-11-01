@@ -31,7 +31,7 @@ export const getProductById: APIGatewayProxyHandler = async (event, _context) =>
         return {
             ...baseResponse,
             statusCode: 500,
-            body: JSON.stringify(e.message),
+            body: e.message,
         };
     }
 }
