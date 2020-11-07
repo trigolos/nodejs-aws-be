@@ -10,7 +10,6 @@ CREATE TABLE products
 
 CREATE TABLE stocks
 (
-    product_id UUID,
-    count      INTEGER,
-    FOREIGN KEY ("product_id") REFERENCES "products" ("id")
+    product_id UUID REFERENCES "products" ("id"),
+    count      INTEGER
 );
