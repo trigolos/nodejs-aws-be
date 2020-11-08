@@ -5,8 +5,8 @@ import { productRepository } from '../repository';
 const baseResponse = {
     headers: {
         'Access-Control-Allow-Origin': '*',
-    }
-}
+    },
+};
 
 export const getProductById: APIGatewayProxyHandler = async (event, _context) => {
     const { productId } = event.pathParameters;
@@ -21,7 +21,7 @@ export const getProductById: APIGatewayProxyHandler = async (event, _context) =>
                 ...baseResponse,
                 statusCode: 404,
                 body: `Product ${productId} not found`,
-            }
+            };
         }
 
         return {
@@ -38,4 +38,4 @@ export const getProductById: APIGatewayProxyHandler = async (event, _context) =>
             body: e.message,
         };
     }
-}
+};

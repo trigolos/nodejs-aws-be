@@ -1,17 +1,25 @@
 import { APIGatewayProxyHandler } from 'aws-lambda';
 import 'source-map-support/register';
 import { productRepository } from '../repository';
-import {Product} from "../types";
+import { Product } from '../types';
 
 const baseResponse = {
     headers: {
         'Access-Control-Allow-Origin': '*',
-    }
-}
+    },
+};
 
-function validate({title, description, price, author, count}: Omit<Product, 'id'>) {
+function validate({ title, description, price, author, count }: Omit<Product, 'id'>) {
     // simple validation
-    return Number.isInteger(count) && count >=0 && Number.isInteger(price) && price >=0 && typeof title === 'string' && typeof description === 'string' && typeof author === 'string';
+    return (
+        Number.isInteger(count) &&
+        count >= 0 &&
+        Number.isInteger(price) &&
+        price >= 0 &&
+        typeof title === 'string' &&
+        typeof description === 'string' &&
+        typeof author === 'string'
+    );
 }
 
 export const createProduct: APIGatewayProxyHandler = async (event, _context) => {
@@ -47,4 +55,4 @@ export const createProduct: APIGatewayProxyHandler = async (event, _context) => 
             body: e.message,
         };
     }
-}
+};
