@@ -14,14 +14,14 @@ export class ProductRepository {
         this.config = config;
     }
 
-    private async connect() {
+    private async connect(): Promise<Client> {
         const client = new Client(this.config);
         await client.connect();
 
         return client;
     }
 
-    async getAll() {
+    async getAll(): Promise<Product[]> {
         const client = await this.connect();
 
         try {
@@ -34,7 +34,7 @@ export class ProductRepository {
 
     }
 
-    async getById(id: string) {
+    async getById(id: string): Promise<Product | undefined> {
         const client = await this.connect();
 
         try {
@@ -46,7 +46,7 @@ export class ProductRepository {
         }
     }
 
-    async create(product: Omit<Product, 'id'>) {
+    async create(product: Omit<Product, 'id'>): Promise<string> {
         const client = await this.connect();
 
         try {

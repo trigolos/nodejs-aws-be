@@ -16,7 +16,7 @@ export const getProductById: APIGatewayProxyHandler = async (event, _context) =>
     try {
         const product = await productRepository.getById(productId);
 
-        if (product === undefined) {
+        if (!product) {
             return {
                 ...baseResponse,
                 statusCode: 404,
