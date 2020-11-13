@@ -1,6 +1,6 @@
 import { APIGatewayProxyHandler } from 'aws-lambda';
 import 'source-map-support/register';
-import { getById } from '../repository';
+import { productRepository } from '../repository';
 
 const baseResponse = {
     headers: {
@@ -11,10 +11,12 @@ const baseResponse = {
 export const getProductById: APIGatewayProxyHandler = async (event, _context) => {
     const { productId } = event.pathParameters;
 
-    try {
-        const product = await getById(productId);
+    console.log('CALL getProductById with productId: ', productId);
 
-        if (product === undefined) {
+    try {
+        const product = await productRepository.getById(productId);
+
+        if (!product) {
             return {
                 ...baseResponse,
                 statusCode: 404,
@@ -28,6 +30,8 @@ export const getProductById: APIGatewayProxyHandler = async (event, _context) =>
             body: JSON.stringify(product),
         };
     } catch (e) {
+        console.log(`ERROR getProductById with productId: ${productId}, error: ${e.message}`);
+
         return {
             ...baseResponse,
             statusCode: 500,

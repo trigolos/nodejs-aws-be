@@ -1,8 +1,8 @@
 import { APIGatewayEvent, Context } from "aws-lambda";
 import utils from 'aws-lambda-test-utils';
 import { getProductById } from '../getProductById';
-import * as repository from '../../repository';
-import { products } from '../../repository/productList';
+import { productRepository } from '../../repository';
+import { products } from './mockedProductList';
 
 const baseRequest = {
     headers: {
@@ -19,7 +19,7 @@ describe('getProductsList handler', () => {
         const event: APIGatewayEvent = utils.mockEventCreator.createAPIGatewayEvent();
         const ctx: Context = utils.mockContextCreator({});
         const requestSpy = jest
-            .spyOn(repository, 'getById')
+            .spyOn(productRepository, 'getById')
             .mockImplementation( () => Promise.resolve(products[0]));
 
         const actual = await getProductById(event, ctx, () => {});
@@ -42,7 +42,7 @@ describe('getProductsList handler', () => {
         });
         const ctx: Context = utils.mockContextCreator({});
         const requestSpy = jest
-            .spyOn(repository, 'getById')
+            .spyOn(productRepository, 'getById')
             .mockImplementation( () => Promise.resolve(undefined));
 
         const actual = await getProductById(event, ctx, () => {});
@@ -61,7 +61,7 @@ describe('getProductsList handler', () => {
         const event: APIGatewayEvent = utils.mockEventCreator.createAPIGatewayEvent();
         const ctx: Context = utils.mockContextCreator({});
         const requestSpy = jest
-            .spyOn(repository, 'getById')
+            .spyOn(productRepository, 'getById')
             .mockImplementation( () => Promise.reject({ message: errorMessage }));
 
         const actual = await getProductById(event, ctx, () => {});

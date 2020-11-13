@@ -1,7 +1,7 @@
 import { APIGatewayEvent, Context } from "aws-lambda";
 import utils from 'aws-lambda-test-utils';
 import { getProductsList } from '../getProductsList';
-import * as repository from '../../repository';
+import { productRepository } from '../../repository';
 
 const baseRequest = {
     headers: {
@@ -18,7 +18,7 @@ describe('getProductsList handler', () => {
         const event: APIGatewayEvent = utils.mockEventCreator.createAPIGatewayEvent();
         const ctx: Context = utils.mockContextCreator({});
         const requestSpy = jest
-            .spyOn(repository, 'getAll')
+            .spyOn(productRepository, 'getAll')
             .mockImplementation( () => Promise.resolve([]));
 
         const actual = await getProductsList(event, ctx, () => {});
@@ -37,7 +37,7 @@ describe('getProductsList handler', () => {
         const event: APIGatewayEvent = utils.mockEventCreator.createAPIGatewayEvent();
         const ctx: Context = utils.mockContextCreator({});
         const requestSpy = jest
-            .spyOn(repository, 'getAll')
+            .spyOn(productRepository, 'getAll')
             .mockImplementation( () => Promise.reject({ message: errorMessage }));
 
         const actual = await getProductsList(event, ctx, () => {});

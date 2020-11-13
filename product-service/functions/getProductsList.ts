@@ -1,6 +1,6 @@
 import { APIGatewayProxyHandler } from 'aws-lambda';
 import 'source-map-support/register';
-import { getAll } from '../repository';
+import { productRepository } from '../repository';
 
 const baseResponse = {
     headers: {
@@ -9,8 +9,10 @@ const baseResponse = {
 }
 
 export const getProductsList: APIGatewayProxyHandler = async (_event, _context) => {
+    console.log('CALL getProductsList');
+
     try {
-        const allProducts = await getAll();
+        const allProducts = await productRepository.getAll();
 
         return {
             ...baseResponse,
@@ -18,6 +20,8 @@ export const getProductsList: APIGatewayProxyHandler = async (_event, _context) 
             body: JSON.stringify(allProducts),
         };
     } catch (e) {
+        console.log('ERROR getProductsList: ', e.message);
+
         return {
             ...baseResponse,
             statusCode: 500,
