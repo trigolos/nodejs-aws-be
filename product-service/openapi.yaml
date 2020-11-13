@@ -1,139 +1,139 @@
 openapi: 3.0.0
 info:
-  title: RS-school shop API
-  description: API for back-end part of rs-school shop
-  version: 1.0.0
+    title: RS-school shop API
+    description: API for back-end part of rs-school shop
+    version: 1.0.0
 servers:
-  - url: https://tsz5wbnhm9.execute-api.eu-west-1.amazonaws.com/dev
-    description: Dev API server
+    - url: https://tsz5wbnhm9.execute-api.eu-west-1.amazonaws.com/dev
+      description: Dev API server
 tags:
-  - name: product-service
-    description: product-service API
+    - name: product-service
+      description: product-service API
 paths:
-  /products:
-    get:
-      tags:
-        - product-service
-      description: Get all products
-      responses:
-        "200":
-          description: all products
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Product'
-    post:
-      tags:
-        - product-service
-      description: Create product
-      responses:
-        "201":
-          description: "Product created"
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  id:
+    /products:
+        get:
+            tags:
+                - product-service
+            description: Get all products
+            responses:
+                '200':
+                    description: all products
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/Product'
+        post:
+            tags:
+                - product-service
+            description: Create product
+            responses:
+                '201':
+                    description: 'Product created'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    id:
+                                        type: string
+                                        format: uuid
+                                        example: 7567ec4b-b10c-48c5-9345-fc73548a80a2
+                '400':
+                    description: Invalid request parameters
+                    content:
+                        text/plain:
+                            schema:
+                                type: string
+                                example: Invalid request parameters
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/CreateProductRequest'
+                required: true
+    /products/{id}:
+        get:
+            tags:
+                - product-service
+            description: Get product by id
+            parameters:
+                - name: id
+                  in: path
+                  description: product id
+                  required: true
+                  style: simple
+                  explode: false
+                  schema:
+                      type: string
+                      format: uuid
+            responses:
+                '200':
+                    description: product
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Product'
+                '404':
+                    description: Product not found
+                    content:
+                        text/plain:
+                            schema:
+                                type: string
+                                example: Product 7567ec4b-b10c-48c5-9345-fc73548a80a7 not found
+components:
+    schemas:
+        Product:
+            required:
+                - author
+                - count
+                - description
+                - id
+                - price
+                - title
+            type: object
+            properties:
+                id:
                     type: string
                     format: uuid
                     example: 7567ec4b-b10c-48c5-9345-fc73548a80a2
-        "400":
-          description: Invalid request parameters
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: Invalid request parameters
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/CreateProductRequest"
-        required: true
-  /products/{id}:
-    get:
-      tags:
-        - product-service
-      description: Get product by id
-      parameters:
-        - name: id
-          in: path
-          description: product id
-          required: true
-          style: simple
-          explode: false
-          schema:
-            type: string
-            format: uuid
-      responses:
-        "200":
-          description: product
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Product'
-        "404":
-          description: Product not found
-          content:
-            text/plain:
-              schema:
-                type: string
-                example: Product 7567ec4b-b10c-48c5-9345-fc73548a80a7 not found
-components:
-  schemas:
-    Product:
-      required:
-        - author
-        - count
-        - description
-        - id
-        - price
-        - title
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          example: 7567ec4b-b10c-48c5-9345-fc73548a80a2
-        title:
-          type: string
-          example: I Was Told There'd Be Cake
-        description:
-          type: string
-          example: Description of book
-        price:
-          type: integer
-          example: 100
-        count:
-          type: integer
-          example: 20
-        author:
-          type: string
-          example: Sloane Crosley
-    CreateProductRequest:
-      required:
-        - title
-        - description
-        - count
-        - price
-        - author
-      type: object
-      properties:
-        title:
-          type: string
-          example: I Was Told There'd Be Cake
-        description:
-          type: string
-          example: Description of book
-        author:
-          type: string
-          example: Sloane Crosley
-        price:
-          type: integer
-          example: 100
-        count:
-          type: integer
-          example: 20
+                title:
+                    type: string
+                    example: I Was Told There'd Be Cake
+                description:
+                    type: string
+                    example: Description of book
+                price:
+                    type: integer
+                    example: 100
+                count:
+                    type: integer
+                    example: 20
+                author:
+                    type: string
+                    example: Sloane Crosley
+        CreateProductRequest:
+            required:
+                - title
+                - description
+                - count
+                - price
+                - author
+            type: object
+            properties:
+                title:
+                    type: string
+                    example: I Was Told There'd Be Cake
+                description:
+                    type: string
+                    example: Description of book
+                author:
+                    type: string
+                    example: Sloane Crosley
+                price:
+                    type: integer
+                    example: 100
+                count:
+                    type: integer
+                    example: 20

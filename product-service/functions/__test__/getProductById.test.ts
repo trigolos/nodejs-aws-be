@@ -1,4 +1,4 @@
-import { APIGatewayEvent, Context } from "aws-lambda";
+import { APIGatewayEvent, Context } from 'aws-lambda';
 import utils from 'aws-lambda-test-utils';
 import { getProductById } from '../getProductById';
 import { productRepository } from '../../repository';
@@ -6,9 +6,9 @@ import { products } from './mockedProductList';
 
 const baseRequest = {
     headers: {
-        "Access-Control-Allow-Origin": "*"
-    }
-}
+        'Access-Control-Allow-Origin': '*',
+    },
+};
 
 beforeEach(() => {
     jest.clearAllMocks();
@@ -20,9 +20,9 @@ describe('getProductsList handler', () => {
         const ctx: Context = utils.mockContextCreator({});
         const requestSpy = jest
             .spyOn(productRepository, 'getById')
-            .mockImplementation( () => Promise.resolve(products[0]));
+            .mockImplementation(() => Promise.resolve(products[0]));
 
-        const actual = await getProductById(event, ctx, () => {});
+        const actual = await getProductById(event, ctx, () => null);
         const expected = {
             ...baseRequest,
             statusCode: 200,
@@ -37,15 +37,15 @@ describe('getProductsList handler', () => {
         const productId = '7567ec4b-b10c-48c5-9345-fc73c48a10ab';
         const event: APIGatewayEvent = utils.mockEventCreator.createAPIGatewayEvent({
             pathParameters: {
-                productId: productId
+                productId: productId,
             },
         });
         const ctx: Context = utils.mockContextCreator({});
         const requestSpy = jest
             .spyOn(productRepository, 'getById')
-            .mockImplementation( () => Promise.resolve(undefined));
+            .mockImplementation(() => Promise.resolve(undefined));
 
-        const actual = await getProductById(event, ctx, () => {});
+        const actual = await getProductById(event, ctx, () => null);
         const expected = {
             ...baseRequest,
             statusCode: 404,
@@ -62,9 +62,9 @@ describe('getProductsList handler', () => {
         const ctx: Context = utils.mockContextCreator({});
         const requestSpy = jest
             .spyOn(productRepository, 'getById')
-            .mockImplementation( () => Promise.reject({ message: errorMessage }));
+            .mockImplementation(() => Promise.reject({ message: errorMessage }));
 
-        const actual = await getProductById(event, ctx, () => {});
+        const actual = await getProductById(event, ctx, () => null);
         const expected = {
             ...baseRequest,
             statusCode: 500,

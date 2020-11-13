@@ -1,6 +1,6 @@
 import { Client, ClientConfig } from 'pg';
-import { config } from "./config";
-import { Product } from "../types";
+import { config } from './config';
+import { Product } from '../types';
 
 const GET_ALL = 'SELECT * FROM products INNER JOIN stocks ON stocks.product_id = products.id';
 const GET_BY_ID = `${GET_ALL} WHERE products.id = $1`;
@@ -31,7 +31,6 @@ export class ProductRepository {
         } finally {
             await client.end();
         }
-
     }
 
     async getById(id: string): Promise<Product | undefined> {
@@ -51,7 +50,12 @@ export class ProductRepository {
 
         try {
             await client.query('BEGIN');
-            const { rows } = await client.query<Pick<Product, 'id'>>(CREATE_ITEM, [product.title, product.description, product.author, product.price]);
+            const { rows } = await client.query<Pick<Product, 'id'>>(CREATE_ITEM, [
+                product.title,
+                product.description,
+                product.author,
+                product.price,
+            ]);
             const id = rows[0].id;
 
             await client.query(ADD_TO_STOCK, [id, product.count]);

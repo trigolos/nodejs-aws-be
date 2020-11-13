@@ -5,8 +5,8 @@ import { productRepository } from '../repository';
 const baseResponse = {
     headers: {
         'Access-Control-Allow-Origin': '*',
-    }
-}
+    },
+};
 
 export const getProductsList: APIGatewayProxyHandler = async (_event, _context) => {
     console.log('CALL getProductsList');
@@ -28,4 +28,4 @@ export const getProductsList: APIGatewayProxyHandler = async (_event, _context) 
             body: e.message,
         };
     }
-}
+};
