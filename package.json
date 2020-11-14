@@ -4,11 +4,15 @@
     "scripts": {
         "lint": "eslint ./ --max-warnings 0",
         "lint:fix": "npm run lint -- --fix",
-        "checkTs": "tsc -p ./product-service  --noEmit",
+        "checkTs": "npm-run-all checkTs:*",
+        "checkTs:product-service": "tsc -p ./product-service --noEmit",
+        "checkTs:import-service": "tsc -p ./import-service --noEmit",
         "prettify": "prettier \"**/!(*.ts|*.js)\"",
         "prettify:fix": "npm run prettify -- --write",
-        "test": "cd product-service && npm test",
-        "setup": "npm ci && cd product-service && npm ci"
+        "test": "npm-run-all test:*",
+        "test:product-service": "cd product-service && npm test",
+        "test:import-service": "cd import-service && npm test",
+        "setup": "npm ci && cd product-service && npm ci && cd ../import-service && npm ci"
     },
     "repository": {
         "type": "git",
@@ -22,6 +26,7 @@
         "eslint-plugin-prettier": "^3.1.4",
         "husky": "^4.3.0",
         "lint-staged": "^10.5.1",
+        "npm-run-all": "^4.1.5",
         "prettier": "^2.1.2",
         "typescript": "^3.2.4"
     },
