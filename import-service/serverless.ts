@@ -1,5 +1,6 @@
 import type { Serverless } from 'serverless/aws';
 import { BUCKET_NAME, REGION } from './constants';
+import { ApiGateway } from 'serverless/plugins/aws/provider/awsProvider';
 
 const serverlessConfiguration: Serverless = {
     service: {
@@ -27,7 +28,8 @@ const serverlessConfiguration: Serverless = {
         },
         apiGateway: {
             minimumCompressionSize: 1024,
-        },
+            shouldStartNameWithService: true,
+        } as ApiGateway,
         environment: {
             AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
         },

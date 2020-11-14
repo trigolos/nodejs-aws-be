@@ -16,7 +16,7 @@ export const importProductsFile: APIGatewayProxyHandler = async (event, _context
         const { name } = event.queryStringParameters;
         const catalogPath = `uploaded/${name}`;
 
-        const s3 = new AWS.S3({ region: REGION });
+        const s3 = new AWS.S3({ region: REGION, signatureVersion: 'v4' });
         const params = {
             Bucket: BUCKET_NAME,
             Key: catalogPath,
