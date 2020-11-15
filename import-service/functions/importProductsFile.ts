@@ -26,6 +26,8 @@ export const importProductsFile: APIGatewayProxyHandler = async (event, _context
 
         const signeUrl = await s3.getSignedUrlPromise('putObject', params);
 
+        console.log('[Result] Signed Url: ', signeUrl);
+
         return {
             ...baseResponse,
             statusCode: 200,
