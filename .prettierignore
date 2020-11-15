@@ -4,6 +4,7 @@
 *.svg
 *.zip
 *.sql
+*.yml
 .env.local
 .serverless
 .vscode
