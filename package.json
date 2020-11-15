@@ -9,7 +9,7 @@
         "checkTs:import-service": "tsc -p ./import-service --noEmit",
         "prettify": "prettier \"**/!(*.ts|*.js)\"",
         "prettify:fix": "npm run prettify -- --write",
-        "test": "npm-run-all test:*",
+        "test": "npm-run-all -p test:*",
         "test:product-service": "cd product-service && npm test",
         "test:import-service": "cd import-service && npm test",
         "setup": "npm ci && cd product-service && npm ci && cd ../import-service && npm ci"
