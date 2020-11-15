@@ -7,7 +7,8 @@
         "checkTs": "tsc -p ./product-service  --noEmit",
         "prettify": "prettier \"**/!(*.ts|*.js)\"",
         "prettify:fix": "npm run prettify -- --write",
-        "test": "cd product-service && npm test"
+        "test": "cd product-service && npm test",
+        "setup": "npm ci && cd product-service && npm ci"
     },
     "repository": {
         "type": "git",
