@@ -1,12 +1,9 @@
 import type { Serverless } from 'serverless/aws';
+import { ApiGateway } from 'serverless/plugins/aws/provider/awsProvider';
+import { REGION } from './constants';
 
 const serverlessConfiguration: Serverless = {
-    service: {
-        name: 'product-service',
-        // app and org for use with dashboard.serverless.com
-        // app: your-app-name,
-        // org: your-org-name,
-    },
+    service: 'product-service',
     frameworkVersion: '2',
     custom: {
         webpack: {
@@ -19,14 +16,15 @@ const serverlessConfiguration: Serverless = {
     provider: {
         name: 'aws',
         runtime: 'nodejs12.x',
-        region: 'eu-west-1',
+        region: REGION,
         stage: 'dev',
         httpApi: {
             cors: true,
         },
         apiGateway: {
             minimumCompressionSize: 1024,
-        },
+            shouldStartNameWithService: true,
+        } as ApiGateway,
         environment: {
             AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
             PG_HOST: process.env.PG_HOST,
@@ -34,6 +32,31 @@ const serverlessConfiguration: Serverless = {
             PG_DATABASE: process.env.PG_DATABASE,
             PG_USERNAME: process.env.PG_USERNAME,
             PG_PASSWORD: process.env.PG_PASSWORD,
+        },
+        iamRoleStatements: [
+            {
+                Effect: 'Allow',
+                Action: 'sqs:*',
+                Resource: { 'Fn::GetAtt': ['SQSQueue', 'Arn'] },
+            },
+        ],
+    },
+    resources: {
+        Resources: {
+            SQSQueue: {
+                Type: 'AWS::SQS::Queue',
+                Properties: {
+                    QueueName: 'catalogItemsQueue',
+                },
+            },
+        },
+        Outputs: {
+            SQSQueueArn: {
+                Value: { 'Fn::GetAtt': ['SQSQueue', 'Arn'] },
+            },
+            SQSQueueUrl: {
+                Value: { Ref: 'SQSQueue' },
+            },
         },
     },
     functions: {
@@ -73,6 +96,17 @@ const serverlessConfiguration: Serverless = {
                     http: {
                         method: 'post',
                         path: 'products',
+                    },
+                },
+            ],
+        },
+        catalogBatchProcess: {
+            handler: 'handler.catalogBatchProcess',
+            events: [
+                {
+                    sqs: {
+                        batchSize: 5,
+                        arn: { 'Fn::GetAtt': ['SQSQueue', 'Arn'] },
                     },
                 },
             ],

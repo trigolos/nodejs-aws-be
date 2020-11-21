@@ -3,12 +3,7 @@ import { BUCKET_NAME, REGION } from './constants';
 import { ApiGateway } from 'serverless/plugins/aws/provider/awsProvider';
 
 const serverlessConfiguration: Serverless = {
-    service: {
-        name: 'import-service',
-        // app and org for use with dashboard.serverless.com
-        // app: your-app-name,
-        // org: your-org-name,
-    },
+    service: 'import-service',
     frameworkVersion: '2',
     custom: {
         webpack: {
@@ -32,6 +27,7 @@ const serverlessConfiguration: Serverless = {
         } as ApiGateway,
         environment: {
             AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
+            CATALOG_SQS_URL: '${cf.${self:provider.region}:product-service-${self:provider.stage}.SQSQueueUrl}',
         },
         iamRoleStatements: [
             {
@@ -43,6 +39,11 @@ const serverlessConfiguration: Serverless = {
                 Effect: 'Allow',
                 Action: 's3:*',
                 Resource: `arn:aws:s3:::${BUCKET_NAME}/*`,
+            },
+            {
+                Effect: 'Allow',
+                Action: 'sqs:*',
+                Resource: '${cf.${self:provider.region}:product-service-${self:provider.stage}.SQSQueueArn}',
             },
         ],
     },
