@@ -34,6 +34,7 @@ const serverlessConfiguration: Serverless = {
             PG_PASSWORD: process.env.PG_PASSWORD,
             SNS_ARN: { Ref: 'SNSTopic' },
             SNS_SUBSCRIPTION_ENDPOINT: process.env.SNS_SUBSCRIPTION_ENDPOINT,
+            SNS_SUBSCRIPTION_EMPTY_DESCRIPTION_ENDPOINT: process.env.SNS_SUBSCRIPTION_EMPTY_DESCRIPTION_ENDPOINT,
         },
         iamRoleStatements: [
             {
@@ -69,6 +70,22 @@ const serverlessConfiguration: Serverless = {
                     Protocol: 'email',
                     TopicArn: {
                         Ref: 'SNSTopic',
+                    },
+                    FilterPolicy: {
+                        emptyDescription: ['false'],
+                    },
+                },
+            },
+            SNSSubscriptionWithEmptyDescription: {
+                Type: 'AWS::SNS::Subscription',
+                Properties: {
+                    Endpoint: '${env:SNS_SUBSCRIPTION_EMPTY_DESCRIPTION_ENDPOINT}',
+                    Protocol: 'email',
+                    TopicArn: {
+                        Ref: 'SNSTopic',
+                    },
+                    FilterPolicy: {
+                        emptyDescription: ['true'],
                     },
                 },
             },
