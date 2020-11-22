@@ -22,12 +22,17 @@ export const importFileParser: S3Handler = async (event) => {
                 s3Stream
                     .pipe(csv())
                     .on('data', async (data) => {
-                        await sqs
-                            .sendMessage({
-                                QueueUrl: process.env.CATALOG_SQS_URL,
-                                MessageBody: JSON.stringify(data),
-                            })
-                            .promise();
+                        try {
+                            await sqs
+                                .sendMessage({
+                                    QueueUrl: process.env.CATALOG_SQS_URL,
+                                    MessageBody: JSON.stringify(data),
+                                })
+                                .promise();
+                        } catch (e) {
+                            console.log('[Error] SQS sendMessage error: ', e.message);
+                            reject(e);
+                        }
 
                         console.log('[Data] record: ', data);
                     })
