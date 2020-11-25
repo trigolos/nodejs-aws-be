@@ -9,6 +9,7 @@ export const importFileParser: S3Handler = async (event) => {
 
     try {
         const s3 = new AWS.S3({ region: REGION, signatureVersion: 'v4' });
+        const sqs = new AWS.SQS();
 
         for (const record of event.Records) {
             const s3ObjectParams = {
@@ -20,7 +21,19 @@ export const importFileParser: S3Handler = async (event) => {
             await new Promise((resolve, reject) => {
                 s3Stream
                     .pipe(csv())
-                    .on('data', (data) => {
+                    .on('data', async (data) => {
+                        try {
+                            await sqs
+                                .sendMessage({
+                                    QueueUrl: process.env.CATALOG_SQS_URL,
+                                    MessageBody: JSON.stringify(data),
+                                })
+                                .promise();
+                        } catch (e) {
+                            console.log('[Error] SQS sendMessage error: ', e.message);
+                            reject(e);
+                        }
+
                         console.log('[Data] record: ', data);
                     })
                     .on('end', async () => {

@@ -5,6 +5,7 @@
 *.zip
 *.sql
 *.yml
+*.csv
 .env.local
 .serverless
 .vscode
