@@ -1,7 +1,7 @@
-import type { AWS } from '@serverless/typescript';
+import type { Serverless } from 'serverless/aws';
 import { REGION } from './constants';
 
-const serverlessConfiguration: AWS = {
+const serverlessConfiguration: Serverless = {
     service: 'authorization-service',
     frameworkVersion: '2',
     custom: {
@@ -30,6 +30,14 @@ const serverlessConfiguration: AWS = {
     functions: {
         basicAuthorizer: {
             handler: 'handler.basicAuthorizer',
+        },
+    },
+    resources: {
+        Resources: {},
+        Outputs: {
+            BasicAuthorizerArn: {
+                Value: { 'Fn::GetAtt': ['BasicAuthorizerLambdaFunction', 'Arn'] },
+            },
         },
     },
 };
