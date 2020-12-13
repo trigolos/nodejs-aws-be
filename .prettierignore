@@ -6,7 +6,9 @@
 *.sql
 *.yml
 *.csv
-.env.local
+*.config
+.env
+.env.*
 .serverless
 .vscode
 .browserslistrc
@@ -23,4 +25,3 @@ Dockerfile
 node_modules
 package-lock.json
 .DS_Store
-
