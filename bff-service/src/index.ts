@@ -1,15 +1,16 @@
 import express from 'express';
 import dotenv from 'dotenv';
-import axios, { AxiosRequestConfig, Method } from 'axios';
-
+import { AxiosRequestConfig, Method } from 'axios';
 dotenv.config();
+
+import request from './request';
 
 const app = express();
 const PORT = process.env.PORT || 8080;
 
 app.use(express.json());
 
-app.all('*', (req, res) => {
+app.all('*', async (req, res) => {
     console.log('OriginalUrl: ', req.originalUrl);
     console.log('Method: ', req.method);
     console.log('Body: ', req.body);
@@ -29,20 +30,13 @@ app.all('*', (req, res) => {
 
         console.log('axiosConfig: ', axiosConfig);
 
-        axios(axiosConfig)
-            .then((response) => {
-                console.log('Response from recipient: ', response.data);
-                res.json(response.data);
-            })
-            .catch((error) => {
-                console.log('Error from recipient: ', JSON.stringify(error));
-                if (error.response) {
-                    const { status, data } = error.response;
-                    res.status(status).json(data);
-                } else {
-                    res.status(500).json({ error: error.message });
-                }
-            });
+        try {
+            const result = await request(axiosConfig);
+            res.json(result);
+        } catch (error) {
+            console.log('Error from recipient: ', JSON.stringify(error));
+            res.status(error.status).json(error.data);
+        }
     } else {
         res.status(502).json({ error: 'Cannot process request' });
     }
