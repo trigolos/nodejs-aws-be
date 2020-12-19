@@ -1,0 +1,33 @@
+{
+    "name": "bff-service",
+    "version": "1.0.0",
+    "description": "",
+    "main": "src/index.js",
+    "scripts": {
+        "start": "node build/src/index.js",
+        "start:debug": "nodemon src/index.ts",
+        "build": "tsc --project ./",
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "eb:init": "eb init --platform node.js --region eu-west-1",
+        "eb:create": "eb create bff-develop --single --cname trigolos-bff-api-develop",
+        "eb:deploy": "eb deploy",
+        "deploy": "npm run build && npm run eb:deploy"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "@types/express": "^4.17.9",
+        "@types/memory-cache": "^0.2.1",
+        "@types/node": "^14.14.13",
+        "nodemon": "^2.0.6",
+        "ts-node": "^9.1.1",
+        "typescript": "^3.9.7"
+    },
+    "dependencies": {
+        "axios": "^0.21.0",
+        "dotenv": "^8.2.0",
+        "express": "^4.17.1",
+        "memory-cache": "^0.2.0"
+    }
+}
